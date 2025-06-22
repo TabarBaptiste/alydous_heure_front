@@ -3,25 +3,18 @@
         <h2 class="mb-3">{{ produit.titre }}</h2>
         <p class="lead">{{ produit.description }}</p>
         <p><strong>Prix :</strong> {{ produit.prix }} €</p>
+        <!-- <p><strong>Durée :</strong> {{ produit.duree }} min</p> -->
     </div>
     <div v-else class="container mt-5">Chargement...</div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import api from '../services/api.ts'
-
-interface Produit {
-    id: number
-    titre: string
-    description: string
-    prix: number
-}
+import api from '../services/api.js'
 
 const route = useRoute()
-const produit = ref<Produit | null>(null)
-
+const produit = ref(null)
 onMounted(async () => {
     try {
         const id = route.params.id

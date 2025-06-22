@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Navbar from './components/Navbar.vue'
+import { ref, provide } from 'vue'
+import Modal from './components/Modal.vue'
+
+const modalRef = ref()
+provide('modal', modalRef)
 </script>
 
 <template>
   <Navbar />
   <RouterView />
+  <Modal ref="modalRef" />
 </template>
 
 <!-- <style scoped>

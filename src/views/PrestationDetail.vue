@@ -8,7 +8,7 @@
     <div v-else class="container mt-5">Chargement...</div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../services/api.js'

@@ -2,15 +2,8 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
     <router-link class="navbar-brand" to="/">Alydous</router-link>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -30,6 +23,10 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/compte">Mon compte</router-link>
           </li>
+          <li class="nav-item">
+            <!-- TODO : à supprimer en preprod -->
+            <a class="nav-link" href="#" @click.prevent="logout">Déconnexion</a> 
+          </li>
         </template>
 
         <template v-else>
@@ -46,9 +43,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useAuth } from '../composables/useAuth'
 
-// ⚠️ Simule si l’utilisateur est connecté ou pas
-// Tu remplaceras plus tard par un vrai système de session/token
-const isLoggedIn = ref(false)
+const { isLoggedIn } = useAuth()
 </script>
