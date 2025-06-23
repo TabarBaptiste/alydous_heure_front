@@ -14,7 +14,7 @@
                                 Quantité : {{ achat.quantite }}<br />
                                 Prix total : <strong>{{ achat.prixTotal.toFixed(2) }} €</strong><br />
                                 Statut : <span :class="getBadgeClass(achat.statut)">{{ achat.statut }}</span><br />
-                                Date : {{ formatDate(achat.dateAchat) }}
+                                Acheté le : {{ formatDate(achat.dateAchat) }}
                             </p>
                         </div>
                     </div>
