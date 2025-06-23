@@ -2,13 +2,11 @@
   <div class="container mt-5">
     <h2 class="mb-4">Nos prestations</h2>
     <div v-if="loading">Chargement...</div>
+    <div v-else-if="prestations.length === 0" class="alert alert-info">Aucune prestation trouvé.</div>
     <div v-else>
       <div class="row">
         <div class="col-md-4 mb-3" v-for="prestation in prestations" :key="prestation.id">
-          <router-link
-            :to="`/prestation/${prestation.id}`"
-            class="card h-100 text-decoration-none text-dark"
-          >
+          <router-link :to="`/prestation/${prestation.id}`" class="card h-100 text-decoration-none text-dark">
             <div class="card-body">
               <h5 class="card-title">{{ prestation.titre }}</h5>
               <p class="card-text">{{ prestation.description }}</p>

@@ -5,6 +5,8 @@ import ProduitList from '../views/ProduitList.vue'
 import PrestationDetail from '../views/PrestationDetail.vue'
 import LoginForm from '../views/LoginForm.vue'
 import RegisterForm from '../views/RegisterForm.vue'
+import Historique from '../views/Historique.vue'
+import Reservation from '../views/Reservation.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +40,16 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterForm
+    },
+    {
+      path: '/historique',
+      name: 'historique',
+      component: Historique
+    },
+    {
+      path: '/reservation',
+      name: 'reservation',
+      component: Reservation
     }
 
 

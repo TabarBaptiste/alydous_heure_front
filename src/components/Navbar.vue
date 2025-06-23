@@ -21,6 +21,9 @@
             <router-link class="nav-link" to="/historique">Historique</router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" to="/reservation">Reservation</router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link" to="/compte">Mon compte</router-link>
           </li>
           <li class="nav-item">

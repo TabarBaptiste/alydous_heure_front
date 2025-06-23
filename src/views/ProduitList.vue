@@ -2,13 +2,11 @@
   <div class="container mt-5">
     <h2 class="mb-4">Nos produits</h2>
     <div v-if="loading">Chargement...</div>
+    <div v-else-if="produits.length === 0" class="alert alert-info">Aucun produit trouvé.</div>
     <div v-else>
       <div class="row">
         <div class="col-md-4 mb-3" v-for="produit in produits" :key="produit.id">
-          <router-link
-            :to="`/produit/${produit.id}`"
-            class="card h-100 text-decoration-none text-dark"
-          >
+          <router-link :to="`/produit/${produit.id}`" class="card h-100 text-decoration-none text-dark">
             <div class="card-body">
               <h5 class="card-title">{{ produit.titre }}</h5>
               <p class="card-text">{{ produit.description }}</p>
