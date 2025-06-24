@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Navbar from './components/Navbar.vue'
-import { ref, provide } from 'vue'
 import Modal from './components/Modal.vue'
+import { ref, provide } from 'vue'
+import { onMounted } from 'vue'
+import { useAuth } from './composables/useAuth'
 
+const { checkTokenValidity } = useAuth()
+
+onMounted(() => {
+  checkTokenValidity()
+})
 const modalRef = ref()
 provide('modal', modalRef)
 </script>

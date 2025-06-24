@@ -27,8 +27,8 @@
             <router-link class="nav-link" to="/compte">Mon compte</router-link>
           </li>
           <li class="nav-item">
-            <!-- TODO : à supprimer en preprod -->
-            <a class="nav-link" href="#" @click.prevent="logout">Déconnexion</a> 
+            <!-- TODO : à supprimer après création compte user -->
+            <a class="nav-link" href="" @click.prevent="handleLogout">Déconnexion</a>
           </li>
         </template>
 
@@ -46,7 +46,20 @@
 </template>
 
 <script setup>
+import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
-const { isLoggedIn } = useAuth()
+const { isLoggedIn, logout } = useAuth()
+const router = useRouter()
+const route = useRoute()
+
+function handleLogout() {
+  logout()
+
+  // 🛡️ Si l'utilisateur est sur une page protégée, on redirige
+  const protectedRoutes = ['/compte', '/historique', '/reservation']
+  if (protectedRoutes.includes(route.path)) {
+    router.push('/login')
+  }
+}
 </script>
