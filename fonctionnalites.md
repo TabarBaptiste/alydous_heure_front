@@ -6,7 +6,7 @@
 
 * [ ] 🔒 Inscription (client)
 * [x] 🔒 Connexion (JWT ou autre)
-* [ ] 🔒 Déconnexion (côté front, mais refresh côté backend)
+* [x] 🔒 Déconnexion (côté front, mais refresh côté backend)
 * [ ] 🔁 Refresh token (si besoin)
 * [ ] 🔧 Modifier ses informations personnelles
 * [ ] 🔧 Modifier son mot de passe
@@ -19,7 +19,7 @@
 ## 🛍️ PRODUITS
 
 * [x] 📄 Récupérer la liste des produits (filtrés par catégorie)
-* [ ] 📄 Récupérer un produit par ID
+* [x] 📄 Récupérer un produit par ID
 * [ ] ✅ Ajouter un produit (admin)
 * [ ] 🔧 Modifier un produit (admin)
 * [ ] ❌ Supprimer un produit (admin)
