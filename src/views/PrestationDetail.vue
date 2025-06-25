@@ -8,6 +8,9 @@
         <hr />
 
         <div v-if="isLoggedIn">
+            <div v-if="message" class="mt-3 alert" :class="messageType">
+                {{ message }}
+            </div>
             <h4>Choisissez un jour</h4>
             <div class="mb-4">
                 <button v-for="day in next7Days" :key="day.iso" class="btn me-2 mb-2"
@@ -32,9 +35,6 @@
                 {{ loading ? 'Réservation…' : 'Réserver' }}
             </button>
 
-            <div v-if="message" class="mt-3 alert" :class="messageType">
-                {{ message }}
-            </div>
         </div>
 
         <div v-else class="alert alert-warning">

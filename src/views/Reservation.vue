@@ -55,7 +55,8 @@ const formatDate = (dateStr) => {
         weekday: 'long',
         day: '2-digit',
         month: 'long',
-        year: 'numeric'
+        year: 'numeric',
+        timeZone: 'UTC'
     })
 }
 
@@ -63,13 +64,23 @@ const formatDate = (dateStr) => {
 const formatTime = (timeStr) => {
     if (!timeStr) return ''
     const date = new Date(timeStr)
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    return date.toLocaleTimeString('fr-FR', {
+        hour: '2-digit', minute: '2-digit',
+        timeZone: 'UTC'
+    })
 }
 
 // Date + heure
 const formatDateTime = (str) => {
     const dt = new Date(str)
-    return dt.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    return dt.toLocaleString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        // timeZone: 'UTC'
+    })
 }
 
 // Badge en fonction du statut
