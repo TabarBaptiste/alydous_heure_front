@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-md-4 mb-3" v-for="prestation in prestations" :key="prestation.id">
           <div class="card h-100 text-dark">
-            <router-link :to="`/prestation/${prestation.id}`" class="text-decoration-none">
+            <router-link :to="`/prestation/${prestation.id}`" class="card h-100 text-decoration-none">
               <div class="card-body">
                 <h5 class="card-title">{{ prestation.titre }}</h5>
                 <p class="card-text">{{ prestation.description }}</p>

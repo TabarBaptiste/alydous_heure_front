@@ -14,14 +14,14 @@
             <h4>Choisissez un jour</h4>
             <div class="mb-4">
                 <button v-for="day in next7Days" :key="day.iso" class="btn me-2 mb-2"
-                    :class="day === selectedDay ? 'btn-primary' : 'btn-outline-secondary'"
-                    :disabled="!hasSlots(day.date)" @click="selectDay(day)">
+                    :class="day === selectedDay ? 'btn-primary' : 'btn-outline-secondary'" :disabled="!day.hasSlot"
+                    @click="selectDay(day)">
                     {{ day.label }}
                 </button>
             </div>
 
             <div v-if="selectedDay">
-                <h5>Créneaux pour le {{ selectedDay.label }}</h5>
+                <h5>Créneaux pour {{ selectedDay.label }}</h5>
                 <div class="d-flex flex-wrap mb-3">
                     <button v-for="slot in availableSlots" :key="slot.start" class="btn me-2 mb-2"
                         :class="slot === selectedSlot ? 'btn-success' : 'btn-outline-primary'" :disabled="slot.disabled"
@@ -74,25 +74,33 @@ onMounted(async () => {
     ])
     prestation.value = pRes.data
     allWeekSlots.value = dRes.data
-    availableDays.value = Object.keys(allWeekSlots.value)
     buildNext7Days()
 })
 
-// Générer les 7 prochains jours
+// 1) Génère les 7 prochains jours avec date en local
 function buildNext7Days() {
     const joursShortFr = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
     const joursFrFull = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+    const today = new Date()
 
     for (let i = 0; i < 7; i++) {
-        const d = new Date()
-        d.setDate(d.getDate() + i)
-        const fullName = joursFrFull[d.getDay()]
-        // ne garder que si la BDD a une entrée pour ce jour
-        if (!availableDays.value.includes(fullName)) continue
+        // crée une date locale sans décalage UTC
+        const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i)
+        const name = joursFrFull[d.getDay()]
+        const plages = allWeekSlots.value[name] || []
+
+        // on génère vite un petit check : y a-t-il au moins un slot non disabled ?
+        const hasSlot = plages.some(({ start, end }) => {
+            const startMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), ...start.split(':').map(Number)).getTime()
+            const endMs = new Date(d.getFullYear(), d.getMonth(), d.getDate(), ...end.split(':').map(Number)).getTime()
+            return endMs > Date.now() // et tu pourrais aussi comparer à durée prestation + pause
+        })
+
+        if (!hasSlot) continue
 
         const iso = d.toISOString().slice(0, 10)
         const label = `${joursShortFr[d.getDay()]} ${d.getDate()}`
-        next7Days.value.push({ date: new Date(iso), iso, label, fullName })
+        next7Days.value.push({ date: d, iso, label, name, hasSlot })
     }
 }
 
@@ -101,49 +109,51 @@ function hasSlots(dayDate) {
     return true
 }
 
-// Au clic sur un jour
+// 2) Au clic sur un jour
 async function selectDay(day) {
     selectedDay.value = day
     selectedSlot.value = null
-    availableSlots.value = await computeSlotsForDate(day.date)
+    availableSlots.value = await computeSlotsForDate(day)
 }
 
-// Génère et filtre les créneaux pour une date
-async function computeSlotsForDate(dateObj) {
-    const dateStr = dateObj.toISOString().slice(0, 10)
-    // 1) récupérer réservations
+// 3) Génère et filtre les créneaux
+async function computeSlotsForDate({ date, iso }) {
     let reserved = []
     try {
-        reserved = (await api.get('/reservation', { params: { date: dateStr } })).data
+        reserved = (await api.get('/reservation', { params: { date: iso } })).data
     } catch { }
-    // 2) récupérer plages hebdo pour ce jour
-    const joursFr = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
-    const dayName = joursFr[dateObj.getDay()]
-    const dayPlages = allWeekSlots.value[dayName] || []
-    // 3) générer créneaux
+
+    const plages = allWeekSlots.value[dateName(date)] || []
     const durMin = prestation.value.duree + 5
     const nowMs = Date.now()
     const slots = []
-    for (const { start, end } of dayPlages) {
-        let cur = new Date(`${dateStr}T${start}`)
-        const plageEnd = new Date(`${dateStr}T${end}`).getTime()
+
+    for (const { start, end } of plages) {
+        let cur = new Date(date.getFullYear(), date.getMonth(), date.getDate(), ...start.split(':').map(Number))
+        const plageEnd = new Date(date.getFullYear(), date.getMonth(), date.getDate(), ...end.split(':').map(Number)).getTime()
+
         while (cur.getTime() + prestation.value.duree * 60000 <= plageEnd) {
             const s = cur.toTimeString().slice(0, 5)
             const eMs = cur.getTime() + prestation.value.duree * 60000
             const e = new Date(eMs).toTimeString().slice(0, 5)
-            // vérifier passé
+
             const dsp = cur.getTime() < nowMs
-            // vérifier chevauchement
             const conflict = reserved.some(r => {
-                const rs = new Date(`${dateStr}T${r.start}`).getTime()
-                const re = new Date(`${dateStr}T${r.end}`).getTime()
+                const rs = new Date(`${iso}T${r.start}`).getTime()
+                const re = new Date(`${iso}T${r.end}`).getTime()
                 return !(eMs <= rs || cur.getTime() >= re)
             })
+
             slots.push({ start: s, end: e, disabled: dsp || conflict })
             cur = new Date(cur.getTime() + durMin * 60000)
         }
     }
     return slots
+}
+
+function dateName(d) {
+    const jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+    return jours[d.getDay()]
 }
 
 // Sélectionne un slot
