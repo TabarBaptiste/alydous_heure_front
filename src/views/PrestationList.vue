@@ -1,20 +1,37 @@
 <template>
   <div class="container mt-5">
+    <div v-if="isLoggedIn && isAdmin" class="mb-3">
+      <button class="btn btn-success" @click="() => router.push({ name: 'prestationCreate' })">
+        Ajouter une prestation
+      </button>
+    </div>
+
     <h2 class="mb-4">Nos prestations</h2>
+
     <div v-if="loading">Chargement...</div>
-    <div v-else-if="prestations.length === 0" class="alert alert-info">Aucune prestation trouvé.</div>
+    <div v-else-if="prestations.length === 0" class="alert alert-info">Aucune prestation trouvée.</div>
     <div v-else>
       <div class="row">
         <div class="col-md-4 mb-3" v-for="prestation in prestations" :key="prestation.id">
-          <router-link :to="`/prestation/${prestation.id}`" class="card h-100 text-decoration-none text-dark">
-            <div class="card-body">
-              <h5 class="card-title">{{ prestation.titre }}</h5>
-              <p class="card-text">{{ prestation.description }}</p>
-              <p class="card-text">
-                <strong>{{ prestation.prix }} €</strong>
-              </p>
+          <div class="card h-100 text-dark">
+            <router-link :to="`/prestation/${prestation.id}`" class="text-decoration-none">
+              <div class="card-body">
+                <h5 class="card-title">{{ prestation.titre }}</h5>
+                <p class="card-text">{{ prestation.description }}</p>
+                <p class="card-text"><strong>{{ prestation.prix }} €</strong></p>
+              </div>
+            </router-link>
+
+            <div v-if="isLoggedIn && isAdmin" class="card-footer bg-white border-top-0">
+              <button class="btn btn-sm btn-outline-primary me-2"
+                @click="() => router.push({ name: 'prestationEdit', params: { id: prestation.id } })">
+                Modifier
+              </button>
+              <button class="btn btn-sm btn-outline-danger" @click="deletePrestation(prestation.id)">
+                Supprimer
+              </button>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -22,8 +39,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import api from '../services/api.js'
+import { useAuth } from '../composables/useAuth'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const { isLoggedIn, user } = useAuth()
+const isAdmin = computed(() => user?.value?.roles?.includes('ROLE_ADMIN') || false)
 
 const prestations = ref([])
 const loading = ref(true)
@@ -38,4 +61,59 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+async function deletePrestation(id) {
+  if (!confirm('Supprimer cette prestation ?')) return
+  try {
+    await api.delete(`/prestation/${id}`)
+    prestations.value = prestations.value.filter(p => p.id !== id)
+  } catch (e) {
+    console.error('Erreur suppression', e)
+  }
+}
+
+function editPrestation(prestation) {
+  const titre = prompt('Nouveau titre', prestation.titre)
+  const description = prompt('Nouvelle description', prestation.description)
+  const prix = prompt('Nouveau prix', prestation.prix)
+  const duree = prompt('Nouvelle durée (minutes)', prestation.duree)
+
+  if (!titre || !prix || !duree) return alert('Champs requis manquants.')
+
+  api.patch(`/prestation/${prestation.id}`, {
+    titre,
+    description,
+    prix: parseFloat(prix),
+    duree: parseInt(duree)
+  }).then(() => {
+    prestation.titre = titre
+    prestation.description = description
+    prestation.prix = parseFloat(prix)
+    prestation.duree = parseInt(duree)
+  }).catch(e => console.error('Erreur mise à jour', e))
+}
+
+function addPrestation() {
+  const titre = prompt('Titre ?')
+  const description = prompt('Description ?')
+  const prix = prompt('Prix ?')
+  const duree = prompt('Durée en minutes ?')
+
+  if (!titre || !prix || !duree) return alert('Champs requis manquants.')
+
+  api.post('/prestation', {
+    titre,
+    description,
+    prix: parseFloat(prix),
+    duree: parseInt(duree)
+  }).then(res => {
+    prestations.value.push({
+      id: res.data.id ?? Date.now(),
+      titre,
+      description,
+      prix: parseFloat(prix),
+      duree: parseInt(duree)
+    })
+  }).catch(e => console.error('Erreur ajout', e))
+}
 </script>

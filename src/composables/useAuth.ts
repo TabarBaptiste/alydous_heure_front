@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // 🔍 Fonction pour décoder le token
 function parseJwt(token) {
@@ -29,18 +29,25 @@ function isTokenValid(token) {
 const storedToken = localStorage.getItem('token')
 const isLoggedIn = ref(storedToken && isTokenValid(storedToken))
 
+// 🔑 Utilisateur décodé
+const user = ref(null)
+if (storedToken && isTokenValid(storedToken)) {
+    user.value = parseJwt(storedToken)
+}
+
 export function useAuth() {
     function login(token) {
         localStorage.setItem('token', token)
         isLoggedIn.value = true
+        user.value = parseJwt(token)
     }
 
     function logout() {
         localStorage.removeItem('token')
         isLoggedIn.value = false
+        user.value = null
     }
 
-    // ⏱ Optionnel : vérifier à tout moment si le token est expiré
     function checkTokenValidity() {
         const token = localStorage.getItem('token')
         if (!token || !isTokenValid(token)) {
@@ -50,6 +57,7 @@ export function useAuth() {
 
     return {
         isLoggedIn,
+        user, // ← maintenant tu peux l'importer
         login,
         logout,
         checkTokenValidity

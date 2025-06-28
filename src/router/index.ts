@@ -8,6 +8,7 @@ import RegisterForm from '../views/RegisterForm.vue'
 import Historique from '../views/Historique.vue'
 import Reservation from '../views/Reservation.vue'
 import Compte from '../views/Compte.vue'
+import PrestationForm from '../views/PrestationForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,7 +57,19 @@ const router = createRouter({
       path: '/compte',
       name: 'compte',
       component: Compte
-    }
+    },
+    {
+      path: '/prestation/create',
+      name: 'prestationCreate',
+      component: PrestationForm,
+      props: { mode: 'create' }
+    },
+    {
+      path: '/prestation/edit/:id',
+      name: 'prestationEdit',
+      component: PrestationForm,
+      props: route => ({ mode: 'edit', id: Number(route.params.id) })
+    },
 
   ],
 })

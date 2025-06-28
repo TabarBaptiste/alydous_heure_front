@@ -30,9 +30,9 @@
 
 * [x] 📄 Récupérer la liste des prestations (par catégorie)
 * [x] 📄 Récupérer une prestation par ID
-* [ ] ✅ Ajouter une prestation (admin)
-* [ ] 🔧 Modifier une prestation (admin)
-* [ ] ❌ Supprimer une prestation (admin)
+* [x] ✅ Ajouter une prestation (admin)
+* [x] 🔧 Modifier une prestation (admin)
+* [x] ❌ Supprimer une prestation (admin)
 
 ---
 
@@ -49,7 +49,7 @@ Qui retourne les créneaux disponibles calculés dynamiquement.
 
 ## 📆 RÉSERVATIONS
 
-* [ ] ✅ Prendre rendez-vous (client)
+* [x] ✅ Prendre rendez-vous (client)
 * [x] 📄 Lister ses propres réservations (client)
 * [ ] 📄 Admin : lister toutes les réservations
 * [ ] 🔧 Modifier un rendez-vous (client ou admin)
@@ -63,7 +63,7 @@ Qui retourne les créneaux disponibles calculés dynamiquement.
 * [x] 📄 Lister ses achats (client)
 * [ ] 📄 Admin : lister tous les achats
 * [ ] ✅ Effectuer un achat (client) — sans paiement en ligne, juste une commande
-* [] 🔁 Admin : changer le statut (livré / annulé)
+* [ ] 🔁 Admin : changer le statut (livré / annulé)
 
 ---
 
