@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 
 // 🔍 Fonction pour décoder le token
-function parseJwt(token) {
+function parseJwt(token: string) {
     try {
         const base64Url = token.split('.')[1]
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
@@ -18,7 +18,7 @@ function parseJwt(token) {
 }
 
 // 🔁 Vérifie si le token est encore valide
-function isTokenValid(token) {
+function isTokenValid(token: string) {
     const payload = parseJwt(token)
     if (!payload || !payload.exp) return false
     const now = Date.now() / 1000
@@ -36,7 +36,7 @@ if (storedToken && isTokenValid(storedToken)) {
 }
 
 export function useAuth() {
-    function login(token) {
+    function login(token: string) {
         localStorage.setItem('token', token)
         isLoggedIn.value = true
         user.value = parseJwt(token)

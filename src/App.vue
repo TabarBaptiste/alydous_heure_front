@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+// @ts-ignore
 import Navbar from './components/Navbar.vue'
+// @ts-ignore
 import Modal from './components/Modal.vue'
 import { ref, provide } from 'vue'
 import { onMounted } from 'vue'
