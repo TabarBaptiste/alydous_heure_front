@@ -15,6 +15,9 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue}'],
     languageOptions: {
       ecmaVersion: 2022, // ou 2021, 2020, etc.
+      globals: {
+        ...pluginVitest.environments.env.globals,
+      },
     },
   },
 
