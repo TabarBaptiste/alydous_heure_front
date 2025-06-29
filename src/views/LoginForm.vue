@@ -27,7 +27,7 @@ const loginUser = async () => {
         const token = res.data.token
         api.defaults.headers.common['Authorization'] = 'Bearer ' + token
         login(token)
-        await router.push('/produit')
+        await router.push('/')
     } catch (e) {
         modal.value?.show('Erreur', 'Identifiants invalides.')
         console.error(e)
