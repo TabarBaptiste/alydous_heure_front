@@ -1,23 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// @ts-ignore
 import PrestationList from '../views/PrestationList.vue'
-// @ts-ignore
 import ProduitDetail from '../views/ProduitDetail.vue'
-// @ts-ignore
 import ProduitList from '../views/ProduitList.vue'
-// @ts-ignore
 import PrestationDetail from '../views/PrestationDetail.vue'
-// @ts-ignore
 import LoginForm from '../views/LoginForm.vue'
-// @ts-ignore
 import RegisterForm from '../views/RegisterForm.vue'
-// @ts-ignore
 import Historique from '../views/Historique.vue'
-// @ts-ignore
 import Reservation from '../views/Reservation.vue'
-// @ts-ignore
 import Compte from '../views/Compte.vue'
-// @ts-ignore
 import PrestationForm from '../views/PrestationForm.vue'
 
 const router = createRouter({
