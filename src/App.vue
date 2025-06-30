@@ -18,7 +18,7 @@ provide('modal', modalRef)
 <template>
   <Navbar />
   <RouterView />
-  <Modal ref="modalRef" />
+  <!-- <Modal ref="modalRef" /> -->
 </template>
 
 <!-- <style scoped>
