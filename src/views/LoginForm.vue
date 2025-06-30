@@ -1,9 +1,24 @@
 <template>
-    <form @submit.prevent="loginUser">
-        <input v-model="email" placeholder="Email" />
-        <input v-model="password" type="password" placeholder="Mot de passe" />
-        <button type="submit">Connexion</button>
-    </form>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
+            <h3 class="card-title text-center mb-4">Connexion</h3>
+            <form @submit.prevent="loginUser" novalidate>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Adresse email</label>
+                    <input id="email" v-model="email" type="email" class="form-control" placeholder="name@example.com"
+                        required />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input id="password" v-model="password" type="password" class="form-control" placeholder="••••••••"
+                        required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    Se connecter
+                </button>
+            </form>
+        </div>
+    </div>
 </template>
 
 <script setup>
