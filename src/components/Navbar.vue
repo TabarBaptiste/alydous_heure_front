@@ -32,6 +32,9 @@
               </li>
             </ul>
           </li>
+          <li v-if="isAdmin" class="nav-item">
+            <router-link class="nav-link" to="/admin">Dashboard</router-link>
+          </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/compte">Mon compte</router-link>
           </li>
@@ -55,10 +58,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
-const { isLoggedIn, logout } = useAuth()
+const { isLoggedIn, logout, user } = useAuth()
+const isAdmin = computed(() => user?.value?.roles?.includes('ROLE_ADMIN') || false)
 const router = useRouter()
 const route = useRoute()
 

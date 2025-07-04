@@ -10,6 +10,8 @@ import Reservation from '../views/Reservation.vue'
 import Compte from '../views/Compte.vue'
 import PrestationForm from '../views/PrestationForm.vue'
 import ProduitForm from '../views/ProduitForm.vue'
+import AdminUsers from '@/views/admin/AdminUsers.vue'
+import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,6 +85,23 @@ const router = createRouter({
       component: PrestationForm,
       props: route => ({ mode: 'edit', id: Number(route.params.id) })
     },
+    {
+      path: '/admin/user',
+      component: AdminUsers,
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: '/admin',
+      component: AdminDashboard,
+      meta: { AdminDashboard: true }
+    },
+    {
+      path: '/admin/user/:id',
+      name: 'AdminUserDetail',
+      component: () => import('@/views/admin/UserDetail.vue'),
+      meta: { requiresAdmin: true }
+    }
+
 
   ],
 })
