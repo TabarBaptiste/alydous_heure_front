@@ -25,16 +25,16 @@
 
             <div class="mb-3">
                 <label class="form-label">Prix (€)</label>
-                <input v-model.number="form.prix" type="number" class="form-control" step="0.01" required />
+                <input v-model.number="form.prix" type="number" class="form-control" min="0" step="0.01" required />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Stock</label>
-                <input v-model.number="form.stock" type="number" class="form-control" required />
+                <input v-model.number="form.stock" type="number" class="form-control" min="0" required />
             </div>
 
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-secondary" @click="goBack">Annuler</button>
+                <button type="button" class="btn btn-secondary" @click="goBack">Retour</button>
                 <button type="submit" class="btn btn-primary" :disabled="submitting">
                     {{ submitting
                         ? (mode === 'create' ? 'Création…' : 'Modification…')
@@ -88,7 +88,7 @@ onMounted(async () => {
         }
     } else {
         Object.assign(form.value, {
-            categorie: 5,
+            categorie: 6,
         })
     }
 })

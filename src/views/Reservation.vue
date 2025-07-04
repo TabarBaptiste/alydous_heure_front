@@ -17,6 +17,7 @@
                                 {{ reservation.prestation?.titre ?? 'Prestation inconnue' }}
                             </h5>
                             <p class="card-text">
+                                Pour : {{ reservation.user.prenom }} {{ reservation.user.nom }}<br />
                                 Date : {{ formatDate(reservation.date) }}<br />
                                 De {{ formatTime(reservation.startTime) }}
                                 à {{ formatTime(reservation.endTime) }}<br />
@@ -67,6 +68,7 @@ onMounted(async () => {
     try {
         const res = await api.get('/reservation/mine')
         reservations.value = res.data
+        console.log("reservations :", reservations.value);
     } catch (e) {
         console.error('Erreur lors du chargement des réservations', e)
     } finally {
