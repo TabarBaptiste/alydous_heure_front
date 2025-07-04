@@ -8,7 +8,9 @@
 
     <h2 class="mb-4">Nos prestations</h2>
 
-    <div v-if="loading">Chargement...</div>
+    <div v-if="loading">
+      <div class="loader"></div>
+    </div>
     <div v-else-if="prestations.length === 0" class="alert alert-info">Aucune prestation trouvée.</div>
     <div v-else>
       <div class="row">

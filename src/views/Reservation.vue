@@ -2,7 +2,9 @@
     <div class="container mt-5">
         <h2 class="mb-4">Mes réservations</h2>
 
-        <div v-if="loading" class="text-center">Chargement...</div>
+        <div v-if="loading" class="text-center">
+            <div class="loader"></div>
+        </div>
         <div v-else-if="reservations.length === 0" class="alert alert-info">
             Aucune réservation trouvée.
         </div>

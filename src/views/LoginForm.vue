@@ -9,16 +9,20 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Adresse email</label>
                     <input id="email" v-model="email" type="email" class="form-control" placeholder="name@example.com"
-                        required @input="errorMessage = ''" />
+                        required @input="errorMessage = ''" :disabled="loading" />
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Mot de passe</label>
                     <input id="password" v-model="password" type="password" class="form-control" placeholder="••••••••"
-                        required @input="errorMessage = ''" />
+                        required @input="errorMessage = ''" :disabled="loading" />
                 </div>
-                <button type="submit" class="btn btn-primary w-100">
+                <div v-if="loading" class="d-flex justify-content-center">
+                    <div class="loader"></div>
+                </div>
+                <button v-else type="submit" class="btn btn-primary w-100">
                     Se connecter
                 </button>
+
             </form>
         </div>
     </div>
@@ -36,8 +40,10 @@ const router = useRouter()
 const modal = inject('modal')
 const { login } = useAuth()
 const errorMessage = ref('')
+const loading = ref(false)
 
 const loginUser = async () => {
+    loading.value = true
     try {
         const res = await api.post('/login_check', {
             email: email.value,
@@ -50,6 +56,8 @@ const loginUser = async () => {
     } catch (e) {
         errorMessage.value = "Identifiants invalides ou erreur de connexion."
         console.error(e)
+    } finally {
+        loading.value = false
     }
 }
 </script>

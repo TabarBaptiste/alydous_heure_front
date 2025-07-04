@@ -25,14 +25,17 @@
                 <div class="d-flex flex-wrap mb-3">
                     <button v-for="slot in availableSlots" :key="slot.start" class="btn me-2 mb-2"
                         :class="slot === selectedSlot ? 'btn-success' : 'btn-outline-primary'" :disabled="slot.disabled"
-                        @click="() => selectSlot(slot)">
+                        @click="selectSlot(slot)">
                         {{ slot.start }} – {{ slot.end }}
                     </button>
                 </div>
             </div>
 
-            <button class="btn btn-primary" :disabled="!selectedSlot || loading" @click="reserver">
-                {{ loading ? 'Réservation…' : 'Réserver' }}
+            <div v-if="loading">
+                <div class="loader"></div>
+            </div>
+            <button v-else class="btn btn-primary" :disabled="!selectedSlot" @click="reserver">
+                Réserver
             </button>
 
         </div>
@@ -41,7 +44,9 @@
             Vous devez être connecté pour réserver.
         </div>
     </div>
-    <div v-else class="container mt-5">Chargement…</div>
+    <div v-else class="container mt-5">
+        <div class="loader"></div>
+    </div>
 </template>
 
 <script setup>
