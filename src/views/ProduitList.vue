@@ -1,7 +1,9 @@
 <template>
   <div class="container mt-5">
     <h2 class="mb-4">Nos produits</h2>
-    <div v-if="loading">Chargement...</div>
+    <div v-if="loading">
+      <div class="loader"></div>
+    </div>
     <div v-else-if="produits.length === 0" class="alert alert-info">Aucun produit trouvé.</div>
     <div v-else>
       <div class="row">

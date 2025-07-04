@@ -5,7 +5,7 @@
         <p><strong>Prix :</strong> {{ produit.prix }} €</p>
         <!-- <p><strong>Durée :</strong> {{ produit.duree }} min</p> -->
     </div>
-    <div v-else class="container mt-5">Chargement...</div>
+    <div v-else class="container mt-5"><div class="loader"></div></div>
 </template>
 
 <script setup>

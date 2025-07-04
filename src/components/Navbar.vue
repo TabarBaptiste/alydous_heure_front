@@ -17,11 +17,20 @@
         </li>
 
         <template v-if="isLoggedIn">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/historique">Historique</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/reservation">Reservation</router-link>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="historiqueDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Historique
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="historiqueDropdown">
+              <router-link class="dropdown-item" to="/achat">
+                <i class="bi bi-bag-check"></i> Achat
+              </router-link>
+
+              <li>
+                <router-link class="dropdown-item" to="/reservation">Réservation</router-link>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/compte">Mon compte</router-link>
@@ -57,7 +66,7 @@ function handleLogout() {
   logout()
 
   // 🛡️ Si l'utilisateur est sur une page protégée, on redirige
-  const protectedRoutes = ['/compte', '/historique', '/reservation']
+  const protectedRoutes = ['/compte', '/achat', '/reservation']
   if (protectedRoutes.includes(route.path)) {
     router.push('/login')
   }

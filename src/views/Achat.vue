@@ -2,7 +2,9 @@
     <div class="container mt-5">
         <h2 class="mb-4">Historique de mes achats</h2>
 
-        <div v-if="loading" class="text-center">Chargement...</div>
+        <div v-if="loading" class="text-center">
+            <div class="loader"></div>
+        </div>
         <div v-else-if="achats.length === 0" class="alert alert-info">Aucun achat trouvé.</div>
         <div v-else>
             <div class="row">

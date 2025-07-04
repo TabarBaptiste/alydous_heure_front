@@ -5,7 +5,7 @@ import ProduitList from '../views/ProduitList.vue'
 import PrestationDetail from '../views/PrestationDetail.vue'
 import LoginForm from '../views/LoginForm.vue'
 import RegisterForm from '../views/RegisterForm.vue'
-import Historique from '../views/Historique.vue'
+import Achat from '../views/Achat.vue'
 import Reservation from '../views/Reservation.vue'
 import Compte from '../views/Compte.vue'
 import PrestationForm from '../views/PrestationForm.vue'
@@ -44,9 +44,9 @@ const router = createRouter({
       component: RegisterForm
     },
     {
-      path: '/historique',
-      name: 'historique',
-      component: Historique
+      path: '/achat',
+      name: 'achat',
+      component: Achat
     },
     {
       path: '/reservation',
