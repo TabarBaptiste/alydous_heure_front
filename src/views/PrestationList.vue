@@ -73,49 +73,4 @@ async function deletePrestation(id) {
     console.error('Erreur suppression', e)
   }
 }
-
-function editPrestation(prestation) {
-  const titre = prompt('Nouveau titre', prestation.titre)
-  const description = prompt('Nouvelle description', prestation.description)
-  const prix = prompt('Nouveau prix', prestation.prix)
-  const duree = prompt('Nouvelle durée (minutes)', prestation.duree)
-
-  if (!titre || !prix || !duree) return alert('Champs requis manquants.')
-
-  api.patch(`/prestation/${prestation.id}`, {
-    titre,
-    description,
-    prix: parseFloat(prix),
-    duree: parseInt(duree)
-  }).then(() => {
-    prestation.titre = titre
-    prestation.description = description
-    prestation.prix = parseFloat(prix)
-    prestation.duree = parseInt(duree)
-  }).catch(e => console.error('Erreur mise à jour', e))
-}
-
-function addPrestation() {
-  const titre = prompt('Titre ?')
-  const description = prompt('Description ?')
-  const prix = prompt('Prix ?')
-  const duree = prompt('Durée en minutes ?')
-
-  if (!titre || !prix || !duree) return alert('Champs requis manquants.')
-
-  api.post('/prestation', {
-    titre,
-    description,
-    prix: parseFloat(prix),
-    duree: parseInt(duree)
-  }).then(res => {
-    prestations.value.push({
-      id: res.data.id ?? Date.now(),
-      titre,
-      description,
-      prix: parseFloat(prix),
-      duree: parseInt(duree)
-    })
-  }).catch(e => console.error('Erreur ajout', e))
-}
 </script>

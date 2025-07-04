@@ -9,6 +9,7 @@ import Achat from '../views/Achat.vue'
 import Reservation from '../views/Reservation.vue'
 import Compte from '../views/Compte.vue'
 import PrestationForm from '../views/PrestationForm.vue'
+import ProduitForm from '../views/ProduitForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,18 @@ const router = createRouter({
       path: '/produit/:id',
       name: 'produitDetail',
       component: ProduitDetail
+    },
+    {
+      path: '/produit/create',
+      name: 'produitCreate',
+      component: ProduitForm,
+      props: { mode: 'create' }
+    },
+    {
+      path: '/produit/edit/:id',
+      name: 'produitEdit',
+      component: ProduitForm,
+      props: route => ({ mode: 'edit', id: Number(route.params.id) })
     },
     {
       path: '/login',

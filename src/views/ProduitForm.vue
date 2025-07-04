@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-5">
         <h2 class="mb-4">
-            {{ mode === 'create' ? 'Ajouter une prestation' : 'Modifier la prestation' }}
+            {{ mode === 'create' ? 'Ajouter une produit' : 'Modifier la produit' }}
         </h2>
 
         <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
@@ -10,6 +10,12 @@
             <div class="mb-3">
                 <label class="form-label">Titre</label>
                 <input v-model="form.titre" type="text" class="form-control" required />
+            </div>
+
+            <!-- TODO mettre un menu déroulant -->
+            <div class="mb-3">
+                <label class="form-label">Categorie</label>
+                <input v-model="form.categorie" type="text" class="form-control" :disabled=true />
             </div>
 
             <div class="mb-3">
@@ -23,8 +29,8 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Durée (minutes)</label>
-                <input v-model.number="form.duree" type="number" class="form-control" required />
+                <label class="form-label">Stock</label>
+                <input v-model.number="form.stock" type="number" class="form-control" required />
             </div>
 
             <div class="d-flex justify-content-between">
@@ -57,27 +63,33 @@ const form = ref({
     titre: '',
     description: '',
     prix: null,
-    duree: null
+    stock: null
 })
 
 const submitting = ref(false)
 const error = ref('')
 const success = ref('')
 
-// Si mode edit, on récupère la prestation
+// Si mode edit, on récupère la produit
 onMounted(async () => {
     if (props.mode === 'edit') {
         try {
-            const res = await api.get(`/prestation/${props.id}`)
+            const res = await api.get(`/produit/${props.id}`)
+
             Object.assign(form.value, {
                 titre: res.data.titre,
+                categorie: res.data.categorie,
                 description: res.data.description,
                 prix: res.data.prix,
-                duree: res.data.duree
+                stock: res.data.stock
             })
         } catch (e) {
-            error.value = 'Impossible de charger la prestation.'
+            error.value = 'Impossible de charger la produit.'
         }
+    } else {
+        Object.assign(form.value, {
+            categorie: 5,
+        })
     }
 })
 
@@ -88,14 +100,14 @@ async function submit() {
 
     try {
         if (props.mode === 'create') {
-            await api.post('/prestation', form.value)
-            success.value = 'Prestation créée avec succès.'
+            await api.post('/produit', form.value)
+            success.value = 'Produit créée avec succès.'
         } else {
-            await api.patch(`/prestation/${props.id}`, form.value)
-            success.value = 'Prestation modifiée avec succès.'
+            await api.patch(`/produit/${props.id}`, form.value)
+            success.value = 'Produit modifiée avec succès.'
         }
         // Après un petit délai, revenir à la liste
-        setTimeout(() => router.push({ name: 'prestations' }), 800)
+        setTimeout(() => router.push({ name: 'produits' }), 800)
     } catch (e) {
         error.value = e.response?.data?.message || 'Erreur lors de la requête.'
     } finally {
