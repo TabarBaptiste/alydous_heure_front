@@ -12,6 +12,7 @@ import PrestationForm from '../views/PrestationForm.vue'
 import ProduitForm from '../views/ProduitForm.vue'
 import AdminUsers from '@/views/admin/AdminUsers.vue'
 import AdminDashboard from '@/views/admin/AdminDashboard.vue'
+import AdminReservations from '@/views/admin/AdminReservations.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -100,8 +101,12 @@ const router = createRouter({
       name: 'AdminUserDetail',
       component: () => import('@/views/admin/UserDetail.vue'),
       meta: { requiresAdmin: true }
-    }
-
+    },
+    {
+      path: '/admin/reservations',
+      name: 'adminReservations',
+      component: AdminReservations
+    },
 
   ],
 })

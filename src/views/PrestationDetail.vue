@@ -125,7 +125,7 @@ async function selectDay(day) {
 async function computeSlotsForDate({ date, iso }) {
     let reserved = []
     try {
-        reserved = (await api.get('/reservation', { params: { date: iso } })).data
+        reserved = (await api.get('/reservation/date', { params: { date: iso } })).data
     } catch { }
 
     const plages = allWeekSlots.value[dateName(date)] || []
