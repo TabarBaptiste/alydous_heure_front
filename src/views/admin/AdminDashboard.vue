@@ -26,7 +26,7 @@
             </div>
             <!-- Utilisateurs -->
             <div class="col-12 col-md-6 col-lg-4">
-                <router-link to="/admin/users" class="text-decoration-none">
+                <router-link to="/admin/user" class="text-decoration-none">
                     <div class="card h-100 shadow-sm hover-shadow">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <i class="bi bi-people-fill mb-3" style="font-size: 2rem;"></i>
