@@ -11,6 +11,10 @@
         <h4>Statistiques</h4>
         <p><strong>Nombre de réservations :</strong> {{ user.nb_reservations }}</p>
         <p><strong>Nombre d’achats :</strong> {{ user.nb_achats }}</p>
+
+        <div class="mt-4">
+            <button class="btn btn-outline-danger" @click="deleteUser(user.id)">🗑️ Supprimer</button>
+        </div>
     </div>
     <div v-else class="container mt-5">
         <div class="loader"></div>
@@ -19,10 +23,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
 
 const route = useRoute()
+const router = useRouter()
 const user = ref(null)
 
 onMounted(async () => {
@@ -57,5 +62,16 @@ function formatPhoneNumber(number) {
 
     // Regrouper en blocs de 2 chiffres
     return number.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+}
+
+async function deleteUser(id) {
+    if (!confirm('Confirmer la suppression de cet utilisateur ?')) return
+    try {
+        await api.delete(`/admin/user/${id}`)
+        alert('Utilisateur supprimé')
+        router.push('/admin/users')
+    } catch (e) {
+        alert(e.response?.data?.error || 'Erreur lors de la suppression')
+    }
 }
 </script>

@@ -103,7 +103,7 @@ const formatDate = (dateStr) => {
 // format heure « 09:00 »
 const formatTime = (timeStr) => {
     if (!timeStr) return ''
-    const d = new Date(`1970-01-01T${timeStr}`)
+    const d = new Date(timeStr)
     return d.toLocaleTimeString('fr-FR', {
         hour: '2-digit',
         minute: '2-digit'
