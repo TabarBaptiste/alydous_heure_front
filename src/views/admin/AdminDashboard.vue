@@ -37,7 +37,7 @@
             </div>
             <!-- Disponibilités -->
             <div class="col-12 col-md-6 col-lg-4">
-                <router-link to="/admin/disponibilites" class="text-decoration-none">
+                <router-link to="/admin/exceptions" class="text-decoration-none">
                     <div class="card h-100 shadow-sm hover-shadow">
                         <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <i class="bi bi-clock-fill mb-3" style="font-size: 2rem;"></i>

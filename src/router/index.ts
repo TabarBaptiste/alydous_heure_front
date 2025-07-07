@@ -15,6 +15,8 @@ import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 import AdminReservations from '@/views/admin/AdminReservations.vue'
 import AdminAchats from '@/views/admin/AdminAchats.vue'
 import AdminDisponibilites from '@/views/admin/AdminDisponibilites.vue'
+import AdminExceptions from '@/views/admin/AdminExceptions.vue'
+import AvailabilityOverview from '../views/AvailabilityOverview.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -118,6 +120,16 @@ const router = createRouter({
       path: '/admin/disponibilites',
       name: 'adminDisponibilites',
       component: AdminDisponibilites
+    },
+    {
+      path: '/admin/exceptions',
+      name: 'adminExceptions',
+      component: AdminExceptions
+    },
+    {
+      path: '/availabilityOverview',
+      name: 'availabilityOverview',
+      component: AvailabilityOverview
     },
 
   ],
