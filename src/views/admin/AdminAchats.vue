@@ -97,7 +97,7 @@ import api from '@/services/api'
 const achats = ref([])
 const loading = ref(true)
 const users = ref([])
-const statutOptions = ['en_attente', 'confirmee', 'annule']
+const statutOptions = ['en_attente', 'confirmee', 'annulee']
 const filters = ref({
     userId: '',
     date: '',
@@ -174,7 +174,7 @@ function getBadgeClass(statut) {
             return 'badge bg-warning text-dark'
         case 'confirmee':
             return 'badge bg-success'
-        case 'annule':
+        case 'annulee':
             return 'badge bg-danger'
         default:
             return 'badge bg-secondary'
