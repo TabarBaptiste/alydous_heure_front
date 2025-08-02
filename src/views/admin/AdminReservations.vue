@@ -2,6 +2,59 @@
     <div class="container mt-5">
         <h2 class="mb-4">Toutes les réservations</h2>
 
+        <!-- ✨ Filtres -->
+        <div class="row mb-4 g-3">
+            <!-- Filtre utilisateur -->
+            <div class="col-md-4 position-relative">
+                <label class="form-label">Utilisateur</label>
+                <div class="position-relative">
+                    <select class="form-select pe-5" v-model="filters.userId" @change="loadReservations">
+                        <option value="">Tous</option>
+                        <option v-for="u in users" :key="u.id" :value="u.id">
+                            {{ u.prenom }} {{ u.nom }}
+                        </option>
+                    </select>
+                    <button v-if="filters.userId" type="button"
+                        class="btn btn-sm btn-light position-absolute top-50 end-0 translate-middle-y me-2"
+                        @click="clearFilter('userId')" style="z-index: 10">
+                        &times;
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtre date -->
+            <div class="col-md-4 position-relative">
+                <label class="form-label">Date</label>
+                <div class="position-relative">
+                    <input type="date" class="form-control pe-5" v-model="filters.date" @change="loadReservations" />
+                    <button v-if="filters.date" type="button"
+                        class="btn btn-sm btn-light position-absolute top-50 end-0 translate-middle-y me-2"
+                        @click="clearFilter('date')" style="z-index: 10">
+                        &times;
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtre statut -->
+            <div class="col-md-4 position-relative">
+                <label class="form-label">Statut</label>
+                <div class="position-relative">
+                    <select class="form-select pe-5" v-model="filters.statut" @change="loadReservations">
+                        <option value="">Tous</option>
+                        <option v-for="opt in statutOptions" :key="opt" :value="opt">
+                            {{ opt }}
+                        </option>
+                    </select>
+                    <button v-if="filters.statut" type="button"
+                        class="btn btn-sm btn-light position-absolute top-50 end-0 translate-middle-y me-2"
+                        @click="clearFilter('statut')" style="z-index: 10">
+                        &times;
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
         <div v-if="loading" class="text-center">
             <div class="loader"></div>
         </div>
@@ -52,11 +105,48 @@ import { ref, onMounted } from 'vue'
 import api from '@/services/api.js'
 
 const reservations = ref([])
+const users = ref([])
 const loading = ref(true)
 const statutOptions = ['en_attente', 'confirmee', 'annulee']
 
+const filters = ref({
+    userId: '',
+    date: '',
+    statut: ''
+})
+
+async function loadReservations() {
+    loading.value = true
+    try {
+        const params = {}
+        if (filters.value.userId) params.userId = filters.value.userId
+        if (filters.value.date) params.date = filters.value.date
+        if (filters.value.statut) params.statut = filters.value.statut
+
+        const res = await api.get('/reservation', { params })
+        reservations.value = res.data
+    } catch (e) {
+        console.error('Erreur lors du chargement des réservations', e)
+    } finally {
+        loading.value = false
+    }
+}
+
+async function loadUsers() {
+    // supposons que tu as un endpoint /user/admin pour les admins
+    const res = await api.get('/admin/user')
+    users.value = res.data
+}
+
+function clearFilter(field) {
+    filters.value[field] = ''
+    loadReservations()
+}
+
 onMounted(async () => {
     try {
+        await loadUsers()
+        await loadReservations()
         const res = await api.get('/reservation')
         reservations.value = res.data
     } catch (e) {
@@ -87,7 +177,7 @@ function formatDate(dateStr) {
 }
 
 function formatTime(timeStr) {
-    return new Date(`1970-01-01T${timeStr}`).toLocaleTimeString('fr-FR', {
+    return new Date(timeStr).toLocaleTimeString('fr-FR', {
         hour: '2-digit',
         minute: '2-digit'
     })

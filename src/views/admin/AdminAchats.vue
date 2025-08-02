@@ -2,6 +2,45 @@
     <div class="container mt-5">
         <h2 class="mb-4">Tous les achats</h2>
 
+        <div class="row mb-4 g-3">
+            <!-- Filtre utilisateur -->
+            <div class="col-md-4 position-relative">
+                <label class="form-label">Utilisateur</label>
+                <div class="position-relative">
+                    <select class="form-select pe-5" v-model="filters.userId" @change="loadAchats">
+                        <option value="">Tous</option>
+                        <option v-for="u in users" :key="u.id" :value="u.id">
+                            {{ u.prenom }} {{ u.nom }}
+                        </option>
+                    </select>
+                    <button v-if="filters.userId"
+                        class="btn btn-sm btn-light position-absolute top-50 end-0 translate-middle-y me-2"
+                        @click="clearFilter('userId')">&times;</button>
+                </div>
+            </div>
+
+            <!-- Filtre date -->
+            <div class="col-md-4 position-relative">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control pe-5" v-model="filters.date" @change="loadAchats" />
+                <button v-if="filters.date"
+                    class="btn btn-sm btn-light position-absolute top-50 end-0 translate-middle-y me-2"
+                    @click="clearFilter('date')">&times;</button>
+            </div>
+
+            <!-- Filtre statut -->
+            <div class="col-md-4 position-relative">
+                <label class="form-label">Statut</label>
+                <select class="form-select pe-5" v-model="filters.statut" @change="loadAchats">
+                    <option value="">Tous</option>
+                    <option v-for="opt in statutOptions" :key="opt" :value="opt">{{ opt }}</option>
+                </select>
+                <button v-if="filters.statut"
+                    class="btn btn-sm btn-light position-absolute top-50 end-0 translate-middle-y me-2"
+                    @click="clearFilter('statut')">&times;</button>
+            </div>
+        </div>
+
         <div v-if="loading" class="text-center">
             <div class="loader"></div>
         </div>
@@ -57,10 +96,18 @@ import api from '@/services/api'
 
 const achats = ref([])
 const loading = ref(true)
+const users = ref([])
 const statutOptions = ['en_attente', 'confirmee', 'annule']
+const filters = ref({
+    userId: '',
+    date: '',
+    statut: ''
+})
 
 onMounted(async () => {
     try {
+        fetchUsers()
+        loadAchats()
         const res = await api.get('/achats')
         achats.value = res.data
     } catch (e) {
@@ -69,6 +116,37 @@ onMounted(async () => {
         loading.value = false
     }
 })
+
+function clearFilter(field) {
+    filters.value[field] = ''
+    loadAchats()
+}
+
+async function loadAchats() {
+    loading.value = true
+    try {
+        const params = new URLSearchParams()
+        if (filters.value.userId) params.append('userId', filters.value.userId)
+        if (filters.value.date) params.append('date', filters.value.date)
+        if (filters.value.statut) params.append('statut', filters.value.statut)
+
+        const res = await api.get('/achats?' + params.toString())
+        achats.value = res.data
+    } catch (e) {
+        console.error('Erreur chargement achats', e)
+    } finally {
+        loading.value = false
+    }
+}
+
+async function fetchUsers() {
+    try {
+        const res = await api.get('/admin/user')
+        users.value = res.data
+    } catch (e) {
+        console.error('Erreur chargement utilisateurs', e)
+    }
+}
 
 async function updateStatut(achat) {
     try {
