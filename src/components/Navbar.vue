@@ -17,20 +17,29 @@
         </li>
 
         <template v-if="isLoggedIn">
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="historiqueDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               Historique
             </a>
             <ul class="dropdown-menu" aria-labelledby="historiqueDropdown">
-              <router-link class="dropdown-item" to="/achat">
-                <i class="bi bi-bag-check"></i> Achat
-              </router-link>
-
               <li>
-                <router-link class="dropdown-item" to="/reservation">Réservation</router-link>
+                <a class="dropdown-item" href="#" @click.prevent="router.push('/achat')">
+                  <i class="bi bi-bag-check"></i> Achat
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" @click.prevent="router.push('/reservation')">
+                  Réservation
+                </a>
               </li>
             </ul>
+          </li> -->
+          <li class="nav-item">
+            <router-link class="nav-link" to="/achat">Achat</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/reservation">Réservation</router-link>
           </li>
           <li v-if="isAdmin" class="nav-item">
             <router-link class="nav-link" to="/admin">Dashboard</router-link>

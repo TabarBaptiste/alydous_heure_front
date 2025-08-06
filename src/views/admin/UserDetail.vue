@@ -56,9 +56,9 @@ function formatPhoneNumber(number) {
     number = number.toString()
 
     // Si le numéro commence par "6" et a 9 chiffres, on suppose que c’est un numéro mobile DOM
-    if (number.length === 9 && number.startsWith('6')) {
+    // if (number.length === 9 && number.startsWith('6')) {
         number = '0' + number
-    }
+    // }
 
     // Regrouper en blocs de 2 chiffres
     return number.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
