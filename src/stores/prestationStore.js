@@ -18,7 +18,7 @@ export const usePrestationStore = defineStore('prestation', {
                 this.prestations = res.data
                 this.loaded = true
             } catch (error) {
-                console.error('Erreur lors du chargement des prestations', e)
+                console.error('Erreur lors du chargement des prestations', error)
             } finally {
                 this.loading = false
             }
@@ -26,7 +26,7 @@ export const usePrestationStore = defineStore('prestation', {
         async deletePrestation(id) {
             try {
                 await api.delete(`/prestation/${id}`)
-                this.prestations = this.prestations.filter(p => p.id !== id)
+                await this.fetchPrestations(true)  // Force le rechargement après suppression
             } catch (e) {
                 console.error('Erreur suppression prestation', e)
             }

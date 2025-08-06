@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <div v-if="isLoggedIn && isAdmin" class="mb-3">
-      <button class="btn btn-success" @click="() => router.push({ name: 'prestationCreate' })">
+      <button class="btn btn-success" @click="openCreateModal">
         Ajouter une prestation
       </button>
     </div>
@@ -25,8 +25,7 @@
             </router-link>
 
             <div v-if="isLoggedIn && isAdmin" class="card-footer bg-white border-top-0">
-              <button class="btn btn-sm btn-outline-primary me-2"
-                @click="() => router.push({ name: 'prestationEdit', params: { id: prestation.id } })">
+              <button class="btn btn-sm btn-outline-primary me-2" @click="() => openEditModal(prestation.id)">
                 Modifier
               </button>
               <button class="btn btn-sm btn-outline-danger" @click="deletePrestation(prestation.id)">
@@ -37,6 +36,9 @@
         </div>
       </div>
     </div>
+
+    <PrestationModal v-model="showModal" :mode="modalMode" :prestation-id="selectedPrestationId"
+      @saved="prestationStore.fetchPrestations(true)" />
   </div>
 </template>
 
@@ -46,6 +48,7 @@ import api from '../services/api.js'
 import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
 import { usePrestationStore } from '../stores/prestationStore.js'
+import PrestationModal from '../components/PrestationModal.vue'
 
 const router = useRouter()
 const { isLoggedIn, user } = useAuth()
@@ -55,9 +58,25 @@ const prestationStore = usePrestationStore()
 const prestations = computed(() => prestationStore.prestations)
 const loading = computed(() => prestationStore.loading)
 
+const showModal = ref(false)
+const modalMode = ref('create')
+const selectedPrestationId = ref(null)
+
 onMounted(() => {
   prestationStore.fetchPrestations()
 })
+
+function openCreateModal() {
+  modalMode.value = 'create'
+  selectedPrestationId.value = null
+  showModal.value = true
+}
+
+function openEditModal(id) {
+  modalMode.value = 'edit'
+  selectedPrestationId.value = id
+  showModal.value = true
+}
 
 async function deletePrestation(id) {
   if (!confirm('Supprimer cette prestation ?')) return
