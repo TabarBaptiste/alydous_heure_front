@@ -45,32 +45,22 @@ import { onMounted, ref, computed } from 'vue'
 import api from '../services/api.js'
 import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
+import { usePrestationStore } from '../stores/prestationStore.js'
 
 const router = useRouter()
 const { isLoggedIn, user } = useAuth()
 const isAdmin = computed(() => user?.value?.roles?.includes('ROLE_ADMIN') || false)
 
-const prestations = ref([])
-const loading = ref(true)
+const prestationStore = usePrestationStore()
+const prestations = computed(() => prestationStore.prestations)
+const loading = computed(() => prestationStore.loading)
 
-onMounted(async () => {
-  try {
-    const res = await api.get('/prestation')
-    prestations.value = res.data
-  } catch (e) {
-    console.error('Erreur lors du chargement des prestations', e)
-  } finally {
-    loading.value = false
-  }
+onMounted(() => {
+  prestationStore.fetchPrestations()
 })
 
 async function deletePrestation(id) {
   if (!confirm('Supprimer cette prestation ?')) return
-  try {
-    await api.delete(`/prestation/${id}`)
-    prestations.value = prestations.value.filter(p => p.id !== id)
-  } catch (e) {
-    console.error('Erreur suppression', e)
-  }
+  await prestationStore.deletePrestation(id)
 }
 </script>

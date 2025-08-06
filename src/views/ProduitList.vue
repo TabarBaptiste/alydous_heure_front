@@ -47,31 +47,22 @@ import { onMounted, ref, computed } from 'vue'
 import api from '../services/api.js'
 import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
+import { useProduitStore } from '../stores/produitStore.js'
 
 const router = useRouter()
 const { isLoggedIn, user } = useAuth()
 const isAdmin = computed(() => user?.value?.roles?.includes('ROLE_ADMIN') || false)
 
-const produits = ref([])
-const loading = ref(true)
+const produitStore = useProduitStore()
+const produits = computed(() => produitStore.produits)
+const loading = computed(() => produitStore.loading)
 
-onMounted(async () => {
-  try {
-    const res = await api.get('/produit')
-    produits.value = res.data
-  } catch (e) {
-    console.error('Erreur lors du chargement des produits', e)
-  } finally {
-    loading.value = false
-  }
+onMounted(() => {
+  produitStore.fetchProduits()
 })
+
 async function deleteProduit(id) {
   if (!confirm('Supprimer cette produit ?')) return
-  try {
-    await api.delete(`/produit/${id}`)
-    produits.value = produits.value.filter(p => p.id !== id)
-  } catch (e) {
-    console.error('Erreur suppression', e)
-  }
+  await produitStore.deleteProduit(id)
 }
 </script>
