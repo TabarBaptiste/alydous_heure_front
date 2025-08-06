@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-        <h2 class="mb-4">Historique de mes achats</h2>
+        <h2 class="mb-4">Historique de mes achats <span v-if="!loading" class="mb-4">({{ achats.length }})</span></h2>
 
         <div v-if="loading" class="text-center">
             <div class="loader"></div>
